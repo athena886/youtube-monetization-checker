@@ -1,5 +1,11 @@
 {
   "name": "yppcheck",
   "compatibility_date": "2025-04-01",
-  "pages_build_output_dir": "public"
+  "pages_build_output_dir": "public",
+  "kv_namespaces": [
+    {
+      "binding": "YT_CACHE",
+      "id": "fe4fd29394d447e6b5445b1c52f07a4a"
+    }
+  ]
 }
