@@ -1,0 +1,14 @@
+{
+  "name": "yppcheck",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler pages dev public --kv YT_CACHE --port 8788",
+    "build": "node scripts/validate-static.mjs",
+    "test": "node --test tests/site.test.mjs"
+  },
+  "devDependencies": {
+    "wrangler": "4.92.0"
+  }
+}

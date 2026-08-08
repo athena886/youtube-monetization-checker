@@ -1,0 +1,6 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
+test('checker contains 14 visible FAQs that exactly match structured data', async()=>{const html=await readFile('public/monetization-checker/index.html','utf8');const visible=[...html.matchAll(/<details(?: open)?><summary>(.*?)<\/summary><p>(.*?)<\/p><\/details>/g)].map(m=>({question:m[1],answer:m[2]}));const schema=[...html.matchAll(/<script type="application\/ld\+json">(.*?)<\/script>/gs)].map(m=>JSON.parse(m[1])).find(x=>x['@type']==='FAQPage');const structured=schema.mainEntity.map(x=>({question:x.name,answer:x.acceptedAnswer.text}));assert.equal(visible.length,14);assert.deepEqual(structured,visible)});
+test('sitemap lists all indexable pages',async()=>{const xml=await readFile('public/sitemap.xml','utf8');for(const path of ['/','/monetization-checker/','/earnings-calculator/'])assert.ok(xml.includes(`https://youtubemonetizationcheck.com${path}`))});
+test('client code never contains an API key',async()=>{const files=['public/index.html','public/monetization-checker/index.html','public/earnings-calculator/index.html','public/assets/site.js'];for(const f of files)assert.ok(!(await readFile(f,'utf8')).includes('YT_API_KEY'))});
