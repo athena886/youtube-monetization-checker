@@ -1,5 +1,5 @@
 import { readFile, access } from 'node:fs/promises';
-const required = ['public/index.html','public/favicon.svg','public/monetization-checker/index.html','public/earnings-calculator/index.html','public/assets/site.css','public/assets/site.js','public/robots.txt','public/sitemap.xml','functions/api/check.js','.env.example'];
+const required = ['public/index.html','public/favicon.svg','public/monetization-checker/index.html','public/earnings-calculator/index.html','public/youtube-monetization-requirements/index.html','public/assets/site.css','public/assets/site.js','public/robots.txt','public/sitemap.xml','functions/api/check.js','.env.example'];
 await Promise.all(required.map(file => access(file)));
 const checker = await readFile('public/monetization-checker/index.html','utf8');
 const exact = [
