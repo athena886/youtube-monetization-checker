@@ -1,3 +1,9 @@
+const ANALYTICS_ID='G-0LS5WJB9EW',CLARITY_ID='xzfd8i42hn';
+if(!navigator.globalPrivacyControl){
+  const ga=document.createElement('script');ga.async=true;ga.src=`https://www.googletagmanager.com/gtag/js?id=${ANALYTICS_ID}`;document.head.append(ga);
+  window.dataLayer=window.dataLayer||[];window.gtag=function(){dataLayer.push(arguments)};gtag('js',new Date());gtag('config',ANALYTICS_ID,{anonymize_ip:true});
+  (function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src=`https://www.clarity.ms/tag/${i}`;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y)})(window,document,'clarity','script',CLARITY_ID);
+}
 const $=(s,r=document)=>r.querySelector(s);const $$=(s,r=document)=>[...r.querySelectorAll(s)];
 const number=(n)=>new Intl.NumberFormat('en-US',{notation:Number(n)>=1e6?'compact':'standard',maximumFractionDigits:1}).format(Number(n)||0);
 const money=(n)=>new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0}).format(Number(n)||0);
