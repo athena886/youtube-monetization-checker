@@ -5,14 +5,15 @@ if(!navigator.globalPrivacyControl){
   (function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src=`https://www.clarity.ms/tag/${i}`;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y)})(window,document,'clarity','script',CLARITY_ID);
 }
 const $=(s,r=document)=>r.querySelector(s);const $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const track=(event,params={})=>{if(typeof window.gtag==='function')window.gtag('event',event,params)};
 const number=(n)=>new Intl.NumberFormat('en-US',{notation:Number(n)>=1e6?'compact':'standard',maximumFractionDigits:1}).format(Number(n)||0);
 const money=(n)=>new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0}).format(Number(n)||0);
 const clamp=(n,min=0,max=100)=>Math.min(max,Math.max(min,n));
 const form=$('#checkerForm');
 if(form){
   const input=$('#channelUrl'),error=$('#formError'),loading=$('#loadingCard'),report=$('#report');
-  form.addEventListener('submit',async(e)=>{e.preventDefault();error.classList.add('hidden');report.classList.add('hidden');loading.classList.remove('hidden');report.scrollIntoView({behavior:'smooth',block:'center'});
-    try{const response=await fetch('/api/check',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({url:input.value.trim()})});const payload=await response.json();if(!response.ok)throw new Error(payload.message||'We could not check this channel right now.');renderReport(payload);loading.classList.add('hidden');report.classList.remove('hidden');report.scrollIntoView({behavior:'smooth',block:'start'});}catch(err){loading.classList.add('hidden');error.textContent=err.message;error.classList.remove('hidden');input.focus();}
+  form.addEventListener('submit',async(e)=>{e.preventDefault();error.classList.add('hidden');report.classList.add('hidden');loading.classList.remove('hidden');report.scrollIntoView({behavior:'smooth',block:'center'});let response;
+    try{response=await fetch('/api/check',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({url:input.value.trim()})});const payload=await response.json();if(!response.ok)throw new Error(payload.message||'We could not check this channel right now.');renderReport(payload);track('check_success',{event_category:'tool',event_label:'monetization_checker',cache_status:payload.cached?'hit':'miss',eligibility_status:payload.eligibility?.code||'unknown'});loading.classList.add('hidden');report.classList.remove('hidden');report.scrollIntoView({behavior:'smooth',block:'start'});}catch(err){track('check_error',{event_category:'tool',event_label:'monetization_checker',http_status:response?.status||0,error_type:response?'api_error':'network_error'});loading.classList.add('hidden');error.textContent=err.message;error.classList.remove('hidden');input.focus();}
   });
   $('#checkAnother')?.addEventListener('click',()=>{report.classList.add('hidden');input.value='';input.focus();scrollTo({top:0,behavior:'smooth'})});
   $('#downloadReport')?.addEventListener('click',downloadReport);
